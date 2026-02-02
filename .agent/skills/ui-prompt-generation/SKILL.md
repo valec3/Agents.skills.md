@@ -1,377 +1,104 @@
 ---
 name: ui-prompt-generation
-description: Use when generating prompts for web UI design, needing modern interface patterns, or structuring design specifications for visual components
+description: Use when generating detailed, technical UI prompts for designers or AI tools (v0, Bolt) that require precise specifications, tokens, and comprehensive state definitions.
 ---
 
 # UI Prompt Generation
 
 ## Overview
 
-A systematic approach to generate comprehensive, precise prompts for web UI design using modern patterns, components, and visual hierarchies. Ensures consistency, completeness, and adherence to current design trends.
+**UI Prompt Generation IS the translation of user intent into precise, token-based technical specifications.**
+
+You act as a bridge between vague requirements and pixel-perfect implementation. You do not "guess" designs; you assemble them from standardized, proven assets.
+
+**Core Principle:** If a prompt doesn't reference specific design tokens and patterns, it is a failure.
 
 ## When to Use
 
 **Use this skill when:**
-
-- Generating prompts for designers or AI design tools
-- Specifying UI components, layouts, or full interfaces
-- Need to reference modern design patterns systematically
-- Creating design briefs or technical specifications for frontend
-- Translating user requirements into detailed UI specifications
-- Ensuring design consistency across a project
+**Use this skill when:**
+- Generating **Production-Ready** technical prompts for AI builders
+- Creating **Exhaustive** component specifications (States, Tokens, A11y)
+- Translating functional requirements into **precise Tailwind/CSS tokens**
+- You need a "Huge", "Detailed", or "Complete" output
+- Creating design briefs that require strict accessibility & responsive rules
 
 **Don't use when:**
-
-- Writing code implementations (use coding skills)
-- Creating basic wireframes without detailed styling
-- Design is already fully specified
+- Brainstorming high-level concepts (use `ui-design-concepts`)
+- Writing actual code implementation (use coding skills)
+- The user asks for a simple text description without technical detail
 
 ## Core Pattern
 
-**Before:**
+**Before (Vague):**
+> "Make a login page. It should look clean."
 
-```
-"Create a login page with email and password"
-```
+**After (Standardized):**
+> **[Agent quietly generates `results/login-prompt.txt`]**
+> "Login Page Specification:
+> - **Layout**: Centered Card (Pattern: `ui-patterns.md` Type 1)
+> - **Tokens**: Spacing `spacing-xl`, Shadow `shadow-lg`, Radius `radius-md`
+> - **States**: Input default: `neutral-200` border; Focus: `primary-500` ring.
+> - **Accessibility**: High contrast text (`neutral-900`), explicit labels."
 
-**After:**
+## Implementation
 
-```
-Create a login page with these specifications:
+**CRITICAL RULE: OUTPUT MUST BE A PLAIN TEXT `.txt` FILE IN `results/`.**
+**NEVER** use Markdown syntax (no `#`, no `**`, no `[ ]`, no code blocks) inside the `.txt` file.
+**ALWAYS** use clean Plain Text formatting:
+- Use UPPERCASE for section headers.
+- Use indentation for hierarchy.
+- Use simple text labels.
 
-Layout & Structure:
-- Centered hero layout with single CTA
-- Asymmetrical grid for visual interest
-- Mobile-first with responsive column stacking
+**CRITICAL RULE: BE EXHAUSTIVE & VERBOSE.**
+- The user expects a "huge", production-ready spec. **DO NOT SUMMARIZE.**
+- **Components**: List every single state (default, hover, active, focus, disabled, loading, error).
+- **Tokens**: Explicitly state every Tailwind class/token (color, spacing, shadow, radius, font-size).
+- **Logic**: Detail edge cases, empty states, and validation rules.
+- **Responsiveness**: Define specific behaviors for Mobile (<640px), Tablet (768px), and Desktop (1024px+).
+- **Volume**: If the output is short, it is WRONG. Aim for maximum density.
 
-Components:
-- Soft cards (no borders) for form container
-- Glassmorphism effect on card background
-- Interactive cards with hover expand on "Forgot password?"
+### Phase 1: Context & Asset Loading
+1.  **Analyze Request**: Identify the component (e.g., "Dashboard", "Form").
+2.  **Load Assets (MANDATORY)**: You **MUST** use `view_file` on these files before generating:
+    -   `assets/design-tokens.md` (Get exact color/spacing values)
+    -   `assets/ui-patterns.md` (Select the structural pattern)
+    -   `assets/component-checklist.md` (Ensure all states are covered)
+    -   `assets/prompt-templates.md` (Use a base structure if applicable)
 
-Visual Hierarchy:
-- Oversized heading: "Welcome Back"
-- Tight headline + relaxed body for form labels
-- High-contrast UI with accent color-driven CTAs
+### Phase 2: Construction
+Build the prompt using the data from the assets. Your prompt must include:
+-   **Purpose**: User goal.
+-   **Structure**: distinct sections for Layout, Visuals, States, Interactions.
+-   **Tokens**: referenced exactly (e.g., `primary-500`, not "blue").
+-   **Accessibility**: ARIA roles, focus states, contrast checks.
 
-Microinteractions:
-- Hover affordances on input fields
-- Button press states with subtle motion feedback
-- Focus states visibles on all interactive elements
-- Inline error feedback below each field
-
-States:
-- Empty state: "Ready to log in"
-- Error states with human language
-- Loading skeleton during authentication
-- Success confirmation with visual feedback
-
-Style:
-- Soft minimalism aesthetic
-- Muted color palette with accent color for CTAs
-- Dark mode-first design
-- Natural easing motion for transitions
-```
-
-## Asset Reference System
-
-The skill includes curated assets in `assets/` directory:
-
-### ui-patterns.md
-
-14 categories of UI patterns covering:
-
-- Layouts, hero sections, cards, navigation
-- Microinteractions, animations, content components
-- Dashboards, scroll behaviors, typography
-- Visual styles, states, mobile-first, emotional design
-
-**Usage:** Reference specific categories when generating prompts for focused requirements.
-
-### design-tokens.md
-
-Standardized design values:
-
-- Spacing scale (4px base)
-- Typography scale
-- Color systems (semantic naming)
-- Shadow levels
-- Border radius values
-- Animation durations & easing
-
-**Usage:** Include specific token values for consistency across generated prompts.
-
-### component-checklist.md
-
-Comprehensive checklist for component specifications:
-
-- Visual states (default, hover, active, disabled, loading)
-- Responsive behavior
-- Accessibility requirements
-- Animation details
-- Error handling
-
-**Usage:** Ensure completeness when generating component-level prompts.
-
-### prompt-templates.md
-
-Ready-to-use templates for common scenarios:
-
-- Landing page sections
-- Dashboard layouts
-- Form interfaces
-- Navigation systems
-- Empty states
-
-**Usage:** Start with templates, customize with specific patterns from ui-patterns.md.
-
-## Quick Reference
-
-| Prompt Type   | Include From Assets                           | Priority Elements                          |
-| ------------- | --------------------------------------------- | ------------------------------------------ |
-| **Full Page** | ui-patterns (types 1-2) + design-tokens       | Layout, Hero, Navigation, Typography       |
-| **Component** | component-checklist + ui-patterns (type 3-5)  | States, Interactions, Visual style         |
-| **Dashboard** | ui-patterns (type 8) + design-tokens          | Data cards, Filters, Actions, Empty states |
-| **Mobile**    | ui-patterns (type 13) + component-checklist   | Gestures, Thumb zones, Bottom sheets       |
-| **Animation** | ui-patterns (type 6) + design-tokens (timing) | Easing, Duration, Triggers, Purpose        |
-
-## Implementation Steps
-
-### 1. Understand Requirements
-
-- Identify the UI element type (page, component, section)
-- Determine primary user goal
-- Note platform constraints (web, mobile, responsive)
-
-### 2. Select Pattern Categories
-
-Reference `assets/ui-patterns.md` and select relevant types:
-
-```
-Landing page → Types 1, 2, 3, 10, 11
-Dashboard → Types 1, 5, 8, 12
-Form → Types 3, 5, 12, 13
-```
-
-### 3. Structure the Prompt
-
-**Template:**
-
-```markdown
-# [Component/Page Name]
-
-## Purpose
-
-[User goal and context]
-
-## Layout & Structure
-
-[Reference types 1, 4]
-
-## Components
-
-[Reference types 3, 7, 8]
-
-## Visual Hierarchy
-
-[Reference type 10]
-
-## Interactions & Feedback
-
-[Reference types 5, 6]
-
-## States
-
-[Reference type 12]
-
-## Style & Aesthetics
-
-[Reference type 11]
-
-## Responsive Behavior
-
-[Reference type 13 if mobile]
-
-## Design Tokens
-
-[Specific values from design-tokens.md]
-```
-
-### 4. Add Specificity
-
-- Include exact measurements when critical
-- Reference design tokens for consistency
-- Specify animation durations and easings
-- Detail accessibility requirements
-- Define error and edge cases
-
-### 5. Validate Completeness
-
-Use `assets/component-checklist.md` to ensure:
-
-- All interactive states covered
-- Responsive breakpoints specified
-- Accessibility considerations included
-- Error handling defined
+### Phase 3: Delivery
+1.  **Write File**: Save the complete content to `results/<descriptive-name>.txt`.
+2.  **Notify**: Tell the user "Prompt generated: `results/<filename>.txt`".
 
 ## Common Mistakes
 
-### ❌ Too Vague
-
-```
-"Make it modern and clean"
-```
-
-**Fix:** Reference specific patterns
-
-```
-"Soft minimalism aesthetic with muted color palette, high-contrast UI,
-oversized headings, and glassmorphism on cards"
-```
+### ❌ Ignoring Tokens
+**Bad**: "Use a light gray background."
+**Good**: "Background: `neutral-50`."
+**Fix**: Always have `design-tokens.md` open.
 
 ### ❌ Missing States
+**Bad**: "A button that submits."
+**Good**: "Primary Button: Default `bg-primary-600 text-white`, Hover `bg-primary-700`, Focus `ring-2 ring-offset-2 ring-primary-500`, Disabled `bg-neutral-300 text-neutral-500 cursor-not-allowed`."
+**Fix**: If you aren't listing at least 3 states, you are failing. Consult `component-checklist.md`.
 
-```
-"Add a submit button"
-```
+### ❌ Chat Dump
+**Bad**: Printing the prompt in the extensive markdown block in chat.
+**Good**: "Saved to `results/prompt.txt`."
+**Fix**: Check your output tool. If it's not `write_to_file`, stop.
 
-**Fix:** Include all states from checklist
+## Quick Reference
 
-```
-"Submit button with:
-- Default: Primary accent color, medium shadow
-- Hover: Slightly elevated, brightness +10%
-- Active: Pressed state, scale 0.98
-- Disabled: 50% opacity, no interaction
-- Loading: Spinner with button text 'Processing...'"
-```
-
-### ❌ Inconsistent Terminology
-
-```
-"Use some animations and make things fade in"
-```
-
-**Fix:** Use standardized terms from assets
-
-```
-"Apply staggered entrance animations (200ms delay between items) with
-natural easing (cubic-bezier(0.4, 0.0, 0.2, 1)), reveal on scroll
-when element enters viewport"
-```
-
-### ❌ No Responsive Strategy
-
-```
-"Create a three-column layout"
-```
-
-**Fix:** Specify breakpoint behavior
-
-```
-"Three-column masonry layout (desktop: 1200px+)
-→ Two columns (tablet: 768-1199px, responsive column stacking)
-→ Single column (mobile: <768px, card-based layout with 16px spacing)"
-```
-
-## Advanced Patterns
-
-### Combining Multiple Pattern Types
-
-For rich interfaces, layer patterns strategically:
-
-```markdown
-E-commerce Product Page:
-
-Hero (Type 2): Split screen layout - product image left, details right
-Layout (Type 1): Bento grid for related products section
-Cards (Type 3): Soft cards with glassmorphism for reviews
-Navigation (Type 4): Sticky navigation with scroll-aware states
-Microinteractions (Type 5):
-
-- Image hover with zoom affordance
-- Add to cart button with success feedback
-- Stock status with subtle pulse animation
-  Scroll (Type 9): Scroll-driven animation revealing product benefits
-  Typography (Type 10): Oversized product name, tight + relaxed specs
-  Style (Type 11): Dark mode-first with accent color on CTAs
-  Mobile (Type 13): Bottom sheet for "Add to cart", swipeable image gallery
-```
-
-### Token-Based Consistency
-
-Reference design tokens for system-wide coherence:
-
-```markdown
-Spacing:
-
-- Section gaps: spacing-xl (64px)
-- Component gaps: spacing-md (24px)
-- Element gaps: spacing-sm (12px)
-
-Typography:
-
-- Heading: type-scale-6 (48px), weight-bold (700)
-- Body: type-scale-2 (16px), weight-normal (400)
-- Caption: type-scale-1 (14px), weight-normal (400)
-
-Shadows:
-
-- Elevated cards: shadow-lg
-- Floating actions: shadow-xl
-- Subtle hover: shadow-md
-
-Animation:
-
-- Fast interactions: duration-fast (150ms)
-- Standard transitions: duration-base (300ms)
-- Page transitions: duration-slow (500ms)
-- All with easing-smooth
-```
-
-### Template Customization
-
-Start with templates, enhance with specific requirements:
-
-```markdown
-Base Template: Dashboard Layout (from prompt-templates.md)
-
-Customizations:
-
-- Data visualization: Animated charts with progressive data disclosure
-- Filters: Visual filters with multi-select, tag-based UI
-- Real-time updates: Subtle pulse on new data, non-blocking notifications
-- Empty state: Illustration with CTA "Import your first dataset"
-- Mobile: Bottom navigation, swipeable metric cards
-- Accessibility: ARIA live regions for data updates, keyboard nav for filters
-```
-
-## Real-World Impact
-
-**Before this skill:**
-
-- Vague prompts resulted in generic, inconsistent designs
-- Missing critical states led to incomplete implementations
-- No standardized language caused miscommunication
-- Iterative back-and-forth to clarify requirements
-
-**After this skill:**
-
-- Comprehensive prompts capture all requirements upfront
-- Consistent terminology across team and tools
-- Complete state coverage prevents edge case bugs
-- Design tokens ensure visual consistency
-- 60-80% reduction in clarification rounds
-
-**Example outcomes:**
-
-- Landing page redesign: Single comprehensive prompt → pixel-perfect first draft
-- Dashboard UI: Complete state coverage prevented 12 edge case issues
-- Component library: Token-based system enabled consistent design at scale
-
-## See Also
-
-- `assets/ui-patterns.md` - Complete pattern reference
-- `assets/design-tokens.md` - Standardized design values
-- `assets/component-checklist.md` - Completeness verification
-- `assets/prompt-templates.md` - Ready-to-use templates
+| Asset | Purpose |
+| :--- | :--- |
+| **`design-tokens.md`** | **REQUIRED**. Colors, spacing, typography, shadows. |
+| **`ui-patterns.md`** | **REQUIRED**. Layouts, cards, navigation structures. |
+| **`component-checklist.md`** | **REQUIRED**. States, accessibility, edge cases. |
+| **`prompt-templates.md`** | Starter skeletons for common pages. |
